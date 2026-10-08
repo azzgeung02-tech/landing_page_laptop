@@ -418,7 +418,7 @@ const adminDashboard = document.getElementById("adminDashboard");
 const adminStats = document.getElementById("adminStats");
 const adminInventoryList = document.getElementById("adminInventoryList");
 const adminSalesList = document.getElementById("adminSalesList");
-const ADMIN_PIN = "1234";
+const ADMIN_PIN = "adminpanel123";
 const INVENTORY_STORAGE_KEY = "azzTechInventoryV1";
 let selectedCategory = "all";
 function formatRupiah(value) {
