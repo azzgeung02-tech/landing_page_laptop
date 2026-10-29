@@ -1149,6 +1149,17 @@ footer {
   color: var(--text-muted);
   font-size: 0.75rem;
 }
+.admin-sale-actions {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 8px;
+}
+.admin-sale-delete {
+  min-height: 36px;
+  padding-inline: 10px;
+  color: #b42335;
+}
 .admin-stock-status {
   width: fit-content;
   padding: 3px 8px;
@@ -1191,9 +1202,6 @@ footer {
   cursor: not-allowed;
   opacity: 0.55;
   transform: none;
-}
-.admin-sale-row > strong {
-  flex: 0 0 auto;
 }
 .admin-empty-state {
   padding: 24px 12px;

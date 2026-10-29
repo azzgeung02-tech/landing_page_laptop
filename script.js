@@ -606,9 +606,10 @@ function renderAdminDashboard() {
       '<p class="admin-empty-state">Belum ada pembelian yang ditandai.</p>';
     return;
   }
-  adminSalesList.innerHTML = [...inventoryState.sales]
+  adminSalesList.innerHTML = inventoryState.sales
+    .map((sale, index) => ({ sale, index }))
     .reverse()
-    .map((sale) => {
+    .map(({ sale, index }) => {
       const product = products.find((item) => item.id === sale.productId);
       const saleDate = new Intl.DateTimeFormat("id-ID", {
         dateStyle: "medium",
@@ -620,7 +621,17 @@ function renderAdminDashboard() {
             <strong>${product.name}</strong>
             <span>${saleDate}</span>
           </div>
-          <strong>${formatRupiah(sale.unitPrice)}</strong>
+          <div class="admin-sale-actions">
+            <strong>${formatRupiah(sale.unitPrice)}</strong>
+            <button
+              class="btn btn-outline admin-sale-delete"
+              type="button"
+              data-delete-sale="${index}"
+              aria-label="Hapus catatan pembelian ${product.name}"
+            >
+              Hapus
+            </button>
+          </div>
         </article>
       `;
     })
@@ -720,6 +731,26 @@ adminInventoryList.addEventListener("click", (event) => {
   inventoryState = nextState;
   updateProductStockDisplay();
   showToast(`${product.name} ditandai dibeli dan stok dikurangi 1.`);
+});
+adminSalesList.addEventListener("click", (event) => {
+  const button = event.target.closest("[data-delete-sale]");
+  if (!button) {
+    return;
+  }
+  const saleIndex = Number(button.dataset.deleteSale);
+  if (!Number.isInteger(saleIndex) || !inventoryState.sales[saleIndex]) {
+    return;
+  }
+  const nextState = {
+    ...inventoryState,
+    sales: inventoryState.sales.filter((_, index) => index !== saleIndex)
+  };
+  if (!saveInventoryState(nextState)) {
+    return;
+  }
+  inventoryState = nextState;
+  renderAdminDashboard();
+  showToast("Catatan pembelian dihapus. Stok produk tidak berubah.");
 });
 function renderProducts(items) {
   productGrid.innerHTML = "";
@@ -1001,7 +1032,7 @@ recommendationForm.addEventListener("submit", (event) => {
     <span class="recommendation-label">
       Rekomendasi terbaik
     </span>
-    <h3>${bestProduct.name}</h3>
+    <h3>${bestProduct.name}</h3>git restoree 
     <p>
       ${bestProduct.description}
     </p>
